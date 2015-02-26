@@ -346,7 +346,7 @@ module Paperclip
       end
 
       define_method "#{name}=" do |file|
-        attachment_for(name).assign(file)
+        attachment_for(name).assign(file) rescue nil
       end
 
       define_method "#{name}?" do
