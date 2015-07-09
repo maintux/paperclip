@@ -295,7 +295,11 @@ module Paperclip
               write_options[:server_side_encryption] = @s3_server_side_encryption
             end
             write_options.merge!(@s3_headers)
-            s3_object(style).write(file, write_options)
+            instance.run_paperclip_callbacks(:s3_upload) do
+              instance.run_paperclip_callbacks(:"#{name}_s3_upload") do
+                s3_object(style).write(file, write_options)
+              end
+            end
           rescue AWS::S3::Errors::NoSuchBucket => e
             create_bucket
             retry
